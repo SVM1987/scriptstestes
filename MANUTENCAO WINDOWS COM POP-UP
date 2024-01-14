@@ -1,0 +1,29 @@
+# Define as tarefas de manutenção que serão executadas
+$tarefas = "Limpar arquivos temporários", "Desfragmentar e otimizar unidades", "Verificar erros no disco", "Atualizar o Windows"
+
+# Define a mensagem de confirmação para iniciar a manutenção
+$mensagem = "Este script irá executar as seguintes tarefas de manutenção no seu computador: `n`t" + [string]::Join("`n`t", $tarefas) + "`n`nVocê deseja continuar?"
+
+# Cria um objeto de caixa de diálogo com as opções Sim e Não
+$caixa = New-Object -ComObject Wscript.Shell
+$opcao = $caixa.Popup($mensagem, 0, "Manutenção do Windows ", 4 + 48)
+
+# Se o usuário clicar em Sim, inicia a manutenção
+if ($opcao -eq 6) {
+    # Limpa os arquivos temporários usando o comando CleanMgr
+    Start-Process CleanMgr -ArgumentList "/sagerun:1" -Wait
+
+    # Desfragmenta e otimiza todas as unidades usando o comando Defrag
+    Get-Volume | ForEach-Object { Start-Process Defrag -ArgumentList $_.DriveLetter, "/O", "/U", "/V" -Wait }
+
+    # Verifica erros no disco usando o comando ChkDsk
+    Get-Volume | ForEach-Object { Start-Process ChkDsk -ArgumentList $_.DriveLetter, "/F", "/R" -Wait }
+
+    # Atualiza o Windows usando o comando UsoClient
+    Start-Process UsoClient -ArgumentList StartScan -Wait
+    Start-Process UsoClient -ArgumentList StartDownload -Wait
+    Start-Process UsoClient -ArgumentList StartInstall -Wait
+
+    # Exibe uma mensagem informando que a manutenção foi concluída
+    $caixa.Popup("A manutenção do Windows  foi concluída com sucesso.", 0, "Manutenção do Windows ", 0 + 64)
+}
