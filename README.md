@@ -1,4 +1,4 @@
-# scriptstestes
+# scriptstestes em windows
 Teste de scripts Windows
 Isenção de responsabilidade: scripts de testes
 
