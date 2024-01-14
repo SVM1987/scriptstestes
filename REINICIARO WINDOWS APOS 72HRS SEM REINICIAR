@@ -10,7 +10,7 @@ $hours = $difference.TotalHours
 # Verifica se o tempo de atividade é maior que 72 horas
 if ($hours -gt 72) {
     # Define a mensagem do aviso
-    $mensagem = "A EQUIPE DE SUPORTE - CLICK SUPORTE TI MSP, Informa que é necessário reiniciar o computador para melhorar o desempenho. Antes de reiniciar SALVE SEUS TRABALHOS!"
+    $mensagem = "A EQUIPE DE SUPORTE - SUPORTE, Informa que é necessário reiniciar o computador para melhorar o desempenho. Antes de reiniciar SALVE SEUS TRABALHOS!"
 
     # Cria um objeto de caixa de diálogo com as opções Sim e Não
     $caixa = New-Object -ComObject Wscript.Shell
