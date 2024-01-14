@@ -1,0 +1,34 @@
+# Verifica o tempo de atividade do sistema
+$uptime = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
+
+# Calcula a diferença entre o tempo atual e o último boot
+$difference = (Get-Date) - $uptime
+
+# Converte a diferença para horas
+$hours = $difference.TotalHours
+
+# Verifica se o tempo de atividade é maior que 72 horas
+if ($hours -gt 72) {
+    # Define a mensagem do aviso
+    $mensagem = "A EQUIPE DE SUPORTE - CLICK SUPORTE TI MSP, Informa que é necessário reiniciar o computador para melhorar o desempenho. Antes de reiniciar SALVE SEUS TRABALHOS!"
+
+    # Cria um objeto de caixa de diálogo com as opções Sim e Não
+    $caixa = New-Object -ComObject Wscript.Shell
+    $opcao = $caixa.Popup($mensagem, 0, "Aviso", 4 + 48)
+
+    # Se o usuário clicar em Sim, pergunta se ele já salvou todos os seus trabalhos
+    if ($opcao -eq 6) {
+        $mensagem = "Você já salvou todos os seus trabalhos?"
+        $opcao = $caixa.Popup($mensagem, 0, "Confirmação", 4 + 48)
+        
+        # Se o usuário clicar em Sim novamente, aguarda 30 segundos e reinicia o computador
+        if ($opcao -eq 6) {
+            Start-Sleep -Seconds 30
+            Restart-Computer -Force
+        }
+    } elseif ($opcao -eq 7) {
+        # Se o usuário clicar em Não, aguarda 5 minutos e exibe o aviso novamente
+        Start-Sleep -Seconds 300
+        $opcao = $caixa.Popup($mensagem, 0, "Aviso", 4 + 48)
+    }
+}
